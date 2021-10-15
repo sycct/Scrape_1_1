@@ -10,7 +10,7 @@ from config import logger_config
 
 class ProcessConnection:
     def __init__(self):
-        logger_name = 'Web Scraping to receive-sms.com'
+        logger_name = 'crawler'
         self._logger_write_file = logger_config.LoggingConfig().init_logging(logger_name)
 
     def init_connection(self, uri):
@@ -22,11 +22,11 @@ class ProcessConnection:
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"}
             html = session.get(uri, headers=headers)
         except (exceptions.ConnectionError, exceptions.HTTPError, exceptions.Timeout) as e:
-            self._logger_write_file.error('执行 get_sms_data 函数出错，具体错误内容：{message}'.format(message=e))
+            self._logger_write_file.error(f'执行 init_connection 函数出错，具体错误内容：{e}')
             return False
         try:
             bsObj = BeautifulSoup(html.text, features='html.parser')
             return bsObj
         except AttributeError as e:
-            self._logger_write_file.error('执行 get_sms_data 函数出错，具体错误内容：{message}'.format(message=e))
+            self._logger_write_file.error(f'执行 init_connection 函数出错，具体错误内容：{e}')
             return False
