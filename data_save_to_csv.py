@@ -24,6 +24,7 @@ class DataSaveToCSV(object):
         get_path = path.join(os.getcwd(), 'files')
         if not path.exists(get_path):
             os.makedirs(get_path)
+        # w+’：写读。打开创建新文件并写入数据，如果文件已存在，则覆盖写。
         csv_file = open(get_path + '\\test.csv', 'w+', newline='')
         try:
             writer = csv.writer(csv_file)
@@ -59,4 +60,4 @@ class DataSaveToCSV(object):
 
 
 if __name__ == '__main__':
-    DataSaveToCSV().save_data()
+    DataSaveToCSV().scrape_data_to_csv()
