@@ -42,7 +42,7 @@ class DataSaveToMySQL(object):
                 get_release_date = item.find("div", {"class": "mb-3 mt-2"}).findAll("span")[1].get_text()
                 # 获取文章描述
                 get_description = item.find("p", {"class": "card-text post-description"}).get_text()
-                self.article_save_mysql(title=get_title, description=get_description, release_date=get_release_date)
+                self.article_save_mysql(title=get_title, description=get_description)
         else:
             self._logging.warning('为获取到文章任何内容，请检查！')
 
@@ -54,13 +54,13 @@ class DataSaveToMySQL(object):
         cur.close()
         conn.close()
 
-    def article_save_mysql(self, title, description, release_date):
+    def article_save_mysql(self, title, description):
         connection = pymysql.connect(host=self._host, port=self._port, user=self._user, password=self._password,
-                                     db=self._db, charset='utf-8')
+                                     db=self._db)
         with connection.cursor() as cursor:
             # Create a new record
-            sql = "INSERT INTO articles (title,summary,create_time) VALUES (%s,%s,%s);"
-            cursor.execute(sql, (title, description, release_date))
+            sql = "INSERT INTO articles (title,summary) VALUES (%s,%s);"
+            cursor.execute(sql, (title, description))
 
         # connection is not autocommit by default. So you must commit to save
         # your changes.
@@ -68,4 +68,4 @@ class DataSaveToMySQL(object):
 
 
 if __name__ == '__main__':
-    DataSaveToMySQL().mysql_query_demo()
+    DataSaveToMySQL().scrape_data()
