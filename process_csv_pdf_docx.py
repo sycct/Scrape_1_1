@@ -49,7 +49,7 @@ class ProcessCSVPDFDOCX(object):
     def read_pdf_main(self):
         pdf_file = urlopen(self._pdf_path)
         # 通过 open 打开 PDF 文件
-        pdf_file = open("../files/text.pdf", 'rb')
+        # pdf_file = open("../files/text.pdf", 'rb')
         output_string = self.read_pdf(pdf_file)
         print(output_string)
         pdf_file.close()
@@ -59,8 +59,8 @@ class ProcessCSVPDFDOCX(object):
         word_file = BytesIO(word_file)
         document = ZipFile(word_file)
         xml_content = document.read('word/document.xml')
-        print(xml_content.decode('utf-8'))
-        word_obj = BeautifulSoup(xml_content.decode('utf-8'),features="html.parser")
+
+        word_obj = BeautifulSoup(xml_content.decode('utf-8'), features="html.parser")
         text_string = word_obj.findAll("w:t")
         for text_ele in text_string:
             print(text_ele.text)
