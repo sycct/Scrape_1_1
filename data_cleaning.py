@@ -3,6 +3,7 @@
 
 import re
 import string
+from collections import OrderedDict
 
 from utils import connection_util
 
@@ -19,8 +20,20 @@ class DataCleaning(object):
             output.append(input[i:i + n])
         return output
 
+    def getNgrams(self, input, n):
+        input = self.clean_input(input)
+        output = dict()
+        for i in range(len(input) - n + 1):
+            newNGram = " ".join(input[i:i + n])
+            if newNGram in output:
+                output[newNGram] += 1
+            else:
+                output[newNGram] = 1
+        return output
+
     @staticmethod
     def clean_input(input):
+        input = input.upper()
         input = re.sub('\n+', " ", input)
         input = re.sub('\[[0-9]*\]', "", input)
         input = re.sub(' +', " ", input)
@@ -40,7 +53,8 @@ class DataCleaning(object):
         get_content = self._init_connection.init_connection(self._target_url)
         if get_content:
             content = get_content.find("div", {"id": "mw-content-text"}).get_text()
-            ngrams = self.ngrams(content, 2)
+            ngrams = self.getNgrams(content, 2)
+            ngrams = OrderedDict(sorted(ngrams.items(), key=lambda t: t[1], reverse=True))
             print(ngrams)
             print("2-grams count is: " + str(len(ngrams)))
 
